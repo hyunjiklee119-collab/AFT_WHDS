@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>소방훈련 부재자 특별 안전 교육</title>
+    <!-- Tailwind CSS CDN 로드 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        /* 기본 글꼴 설정 (Inter와 한국어 시스템 폰트 사용) */
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            background-color: #f0f4f8; /* 은은한 배경색 */
+        }
+        .card {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+        /* YouTube 반응형 비율 유지 */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 비율 */
+            height: 0;
+            overflow: hidden;
+            border-radius: 0.5rem; /* rounded-lg */
+            transition: opacity 0.3s ease-in-out;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        /* 퀴즈 옵션 스타일 */
+        .quiz-option {
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid transparent;
+            transition: all 0.15s ease-in-out;
+            display: flex;
+            align-items: center;
+        }
+        .quiz-option:hover {
+            background-color: #f3f4f6;
+        }
+        /* 정답 피드백 스타일 */
+        .quiz-option.correct {
+            background-color: #ecfdf5; /* green-50 */
+            border-color: #34d399; /* green-400 */
+        }
+        /* 오답 피드백 스타일 */
+        .quiz-option.incorrect {
+            background-color: #fee2e2; /* red-100 */
+            border-color: #f87171; /* red-400 */
+        }
+        .quiz-option input[type="radio"] {
+            margin-right: 8px;
+        }
+        .feedback-icon {
+            margin-left: auto;
+            font-weight: bold;
+        }
+        /* 비디오 스텝 컨테이너에 애니메이션 추가 */
+        .video-step.hidden {
+            display: none;
+        }
+        /* 메인 페이지 전환 스타일 */
+        .page-content.hidden {
+            display: none;
+        }
+        /* 네비게이션 활성화 스타일 */
+        .nav-button.active {
+            color: #b91c1c; /* red-700 */
+            border-bottom-color: #b91c1c; /* red-700 */
+            background-color: #fef2f2; /* red-50 */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app" class="max-w-4xl mx-auto p-4 md:p-8">
+        <!-- 헤더 및 교육 제목 -->
+        <header class="text-center mb-6 p-6 bg-white rounded-xl card border-t-4 border-red-600">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-red-700 mb-2">
+                소방훈련 부재자 특별 안전 교육
+            </h1>
+            <p class="text-gray-600 text-lg">
+                안전은 선택이 아닌 필수입니다. 화재 시 주요 행동 요령을 반드시 숙지해 주십시오.
+            </p>
+        </header>
+
+        <!-- 메인 페이지 네비게이션 (섹션 전환) -->
+        <nav class="mb-6 bg-white pt-2 rounded-t-lg card">
+            <div class="flex flex-wrap -mb-px text-sm md:text-base font-medium text-center">
+                <button onclick="switchPage(1)" data-page-button="1"
+                        class="nav-button flex-1 py-3 px-2 md:px-4 rounded-t-lg transition-colors duration-200 focus:outline-none border-b-4 border-transparent text-gray-600 hover:bg-gray-50">
+                    1. 대응 절차
+                </button>
+                <button onclick="switchPage(2)" data-page-button="2"
+                        class="nav-button flex-1 py-3 px-2 md:px-4 rounded-t-lg transition-colors duration-200 focus:outline-none border-b-4 border-transparent text-gray-600 hover:bg-gray-50">
+                    2. 필수 영상 시청
+                </button>
+                <button onclick="switchPage(3)" data-page-button="3"
+                        class="nav-button flex-1 py-3 px-2 md:px-4 rounded-t-lg transition-colors duration-200 focus:outline-none border-b-4 border-transparent text-gray-600 hover:bg-gray-50">
+                    3. 퀴즈 및 제출
+                </button>
+            </div>
+        </nav>
+        
+        <!-- 메인 콘텐츠 컨테이너 (페이지 전환 대상) -->
+        <div id="main-content-wrapper">
+
+            <!-- PAGE 1. 화재 시 주요 대응 절차 -->
+            <section data-page-id="1" class="page-content mb-8 p-6 bg-white rounded-xl card">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 pb-2 border-red-200 flex items-center">
+                    <span class="text-red-600 mr-2 text-3xl">🔥</span> 화재 발생 시 주요 대응 절차
+                </h2>
+                <div class="space-y-4 text-gray-700">
+                    
+                    <!-- 1단계: 화재 인지 및 전파 -->
+                    <div class="p-4 bg-red-50 rounded-lg border-l-4 border-red-500">
+                        <p class="font-bold text-lg text-red-800 mb-1">1단계: 화재 인지 및 전파 (발견 즉시)</p>
+                        <ul class="list-disc pl-5 text-sm space-y-1">
+                            <li>"불이야!" 라고 외쳐 주변에 알립니다.</li>
+                            <li>비상벨을 누르고 119에 신고합니다. (신고 시, 건물명과 층수를 정확히 알립니다)</li>
+                            <li>업무 중 화재를 발견했다면, 즉시 작업을 멈추고 안전을 확보한 후, 소속 부서장 및 안전환경팀에 상황을 전파합니다.</li>
+                        </ul>
+                    </div>
+
+                    <!-- 화살표 아이콘 추가 (시각화 개선) -->
+                    <div class="flex justify-center my-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
+                        </svg>
+                    </div>
+
+                    <!-- 2단계: 초기 진압 -->
+                    <div class="p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+                        <p class="font-bold text-lg text-yellow-800 mb-1">2단계: 초기 진압 (확산 전)</p>
+                        <ul class="list-disc pl-5 text-sm space-y-1">
+                            <li>소화기나 소화전을 이용하여 초기 진화를 시도합니다. (위험 시 즉시 대피)</li>
+                            <li>화재 확산 및 연기 유입 방지를 위해 방화문, 출입문 등을 닫습니다.</li>
+                            <li>화재 확산을 막기 위해, 가스 밸브를 잠그고 전기 차단기를 내려 가스 및 전기 공급을 즉시 차단합니다.</li>
+                        </ul>
+                    </div>
+
+                    <!-- 화살표 아이콘 추가 (시각화 개선) -->
+                    <div class="flex justify-center my-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
+                        </svg>
+                    </div>
+
+                    <!-- 3단계: 비상 대피 -->
+                    <div class="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                        <p class="font-bold text-lg text-blue-800 mb-1">3단계: 비상 대피 (인명 최우선)</p>
+                        <ul class="list-disc pl-5 text-sm space-y-1">
+                            <li>젖은 수건 등으로 입과 코를 막고, 낮은 자세로 이동합니다.</li>
+                            <li><b>엘리베이터 사용 금지</b>, 비상 계단을 이용해 지정된 대피 장소로 이동합니다.</li>
+                            <li>탈출 시 문을 닫고, 대피 후 건물 내로 절대 재진입하지 않습니다.</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- 화살표 아이콘 추가 (시각화 개선) -->
+                    <div class="flex justify-center my-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
+                        </svg>
+                    </div>
+
+                    <!-- 4단계: 집결지 행동 (대피 완료) -->
+                    <div class="p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
+                        <p class="font-bold text-lg text-green-800 mb-1">4단계: 집결지 행동 (대피 완료)</p>
+                        <ul class="list-disc pl-5 text-sm space-y-1">
+                            <li>지정된 집결지로 신속히 이동합니다.</li>
+                            <li><b>부서장 또는 부서별 대표자</b>의 통제 하에 인원 현황 파악에 즉시 협조합니다.</li>
+                            <li>본인 또는 동료의 건강상의 문제(부상, 호흡 곤란 등)가 확인될 경우, 즉시 지휘부(통제자)에게 알립니다.</li>
+                            <li>지휘부의 별도 지시가 있을 때까지 대기합니다.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE 2. 영상 교육 콘텐츠 (슬라이드 형태로 변경됨) -->
+            <section data-page-id="2" class="page-content hidden mb-8 p-6 bg-white rounded-xl card">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b-2 pb-2 border-red-200 flex items-center">
+                    <span class="text-blue-600 mr-2 text-3xl">📺</span> 필수 시청 영상 (4개 중 <span id="video-step-status" class="ml-1 text-red-600">1/4</span>)
+                </h2>
+                <!-- 안내 문구 수정 -->
+                <p class="text-sm text-red-600 mb-4 font-semibold">
+                    * 4개의 필수 영상을 모두 시청한 후, [3. 퀴즈 및 제출] 탭에서 최종 응답을 완료해 주십시오.
+                </p>
+                
+                <div id="video-content-wrapper" class="space-y-4">
+                    
+                    <!-- Video Step 1: 소화기 사용법 -->
+                    <div data-video-step="0" class="video-step">
+                        <h3 class="font-semibold text-lg text-gray-700 mb-1">1. 올바른 소화기 사용법</h3>
+                        <div class="video-container">
+                            <!-- YouTube Video: 소화기 사용법 PASS (API 활성화) -->
+                            <iframe id="player-0" 
+                                src="https://www.youtube.com/embed/1R0yTH8_hkE?enablejsapi=1&version=3&rel=0&showinfo=0" 
+                                frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2 text-left">출처: 한국소방안전원 (Korea Fire Safety Institute)</p>
+                        <p class="mt-1 text-right text-sm">
+                            <a href="https://www.youtube.com/watch?v=1R0yTH8_hkE" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium flex items-center justify-end">
+                                영상이 표시되지 않을 경우, URL로 직접 시청하기 
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+                                    <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+                                </svg>
+                            </a>
+                        </p>
+                    </div>
+
+                    <!-- Video Step 2: 소화전 사용 방법 및 주의사항 -->
+                    <div data-video-step="1" class="video-step hidden">
+                        <h3 class="font-semibold text-lg text-gray-700 mb-1">2. 소화전 사용 방법 및 주의사항</h3>
+                        <div class="video-container">
+                            <!-- YouTube Video: 옥내 소화전 사용법 (API 활성화) -->
+                            <iframe id="player-1" 
+                                src="https://www.youtube.com/embed/3k7F4RkM9ec?enablejsapi=1&version=3&rel=0&showinfo=0" 
+                                frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2 text-left">출처: 한국소방안전원 (Korea Fire Safety Institute)</p>
+                        <p class="mt-1 text-right text-sm">
+                            <a href="https://www.youtube.com/watch?v=3k7F4RkM9ec" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium flex items-center justify-end">
+                                영상이 표시되지 않을 경우, URL로 직접 시청하기 
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+                                    <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+                                </svg>
+                            </a>
+                        </p>
+                    </div>
+
+                    <!-- Video Step 3: 심폐소생술 (CPR) -->
+                    <div data-video-step="2" class="video-step hidden">
+                        <h3 class="font-semibold text-lg text-gray-700 mb-1">3. 생명을 살리는 심폐소생술(CPR)</h3>
+                        <div class="video-container">
+                            <!-- YouTube Video: 심폐소생술 (CPR) 교육 (API 활성화) -->
+                            <iframe id="player-2" 
+                                src="https://www.youtube.com/embed/vkX6vCgctJk?enablejsapi=1&version=3&rel=0&showinfo=0" 
+                                frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2 text-left">출처: 한국소방안전원 (Korea Fire Safety Institute)</p>
+                        <p class="mt-1 text-right text-sm">
+                            <a href="https://www.youtube.com/watch?v=vkX6vCgctJk" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium flex items-center justify-end">
+                                영상이 표시되지 않을 경우, URL로 직접 시청하기 
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+                                    <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+                                </svg>
+                            </a>
+                        </p>
+                    </div>
+
+                    <!-- Video Step 4: 화재 발생 시 단계별 대응 요령 -->
+                    <div data-video-step="3" class="video-step hidden">
+                        <h3 class="font-semibold text-lg text-gray-700 mb-1">4. 화재 발생 시 단계별 대응 요령</h3>
+                        <div class="video-container">
+                            <!-- YouTube Video: 대피 요령 (API 활성화) -->
+                            <iframe id="player-3" 
+                                src="https://www.youtube.com/embed/m4idjBkiPwo?enablejsapi=1&version=3&rel=0&showinfo=0" 
+                                frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2 text-left">출처: 한국소방안전원 (Korea Fire Safety Institute)</p>
+                        <p class="mt-1 text-right text-sm">
+                            <a href="https://www.youtube.com/watch?v=m4idjBkiPwo" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium flex items-center justify-end">
+                                영상이 표시되지 않을 경우, URL로 직접 시청하기 
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+                                    <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+                                </svg>
+                            </a>
+                        </p>
+                    </div>
+
+                    <!-- 네비게이션 버튼 -->
+                    <div class="flex justify-between pt-4 border-t border-gray-200 mt-6">
+                        <button type="button" id="prev-video-btn" onclick="changeVideoStep(-1)" disabled
+                            class="px-4 py-2 bg-gray-400 text-white font-bold rounded-lg hover:bg-gray-400 transition duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span class="text-xl mr-1">⬅️</span> 이전 영상
+                        </button>
+                        
+                        <button type="button" id="next-video-btn" onclick="changeVideoStep(1)"
+                            class="px-4 py-2 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition duration-150 transform hover:scale-105">
+                            다음 영상 <span class="text-xl ml-1">➡️</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- PAGE 3. 교육 이행 확인 퀴즈 및 제출 폼 -->
+            <section data-page-id="3" class="page-content hidden mb-8 p-6 bg-white rounded-xl card">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b-2 pb-2 border-red-200 flex items-center">
+                    <span class="text-green-600 mr-2 text-3xl">📝</span> 교육 이행 확인 (Quiz & 제출)
+                </h2>
+
+                <p class="text-sm text-gray-500 mb-4 bg-green-100 p-3 rounded-lg border border-green-300">
+                    작성하신 정보 및 퀴즈 응답은 교육 이행 증빙을 위해 Google Apps Script 서버로 전송됩니다.
+                </p>
+
+                <form id="training-quiz-form" onsubmit="handleFormSubmit(event)">
+
+                    <!-- 교육 확인 정보 입력 -->
+                    <div class="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-3">
+                        <p class="text-base font-bold text-gray-700 mb-2">교육 확인 정보 <span class="text-red-500">*</span></p>
+                        <div class="flex flex-col md:flex-row md:space-x-4 space-y-3 md:space-y-0">
+                            <div class="flex-1">
+                                <label for="reporter_name" class="block text-sm font-medium text-gray-700 mb-1">성명</label>
+                                <input type="text" id="reporter_name" name="reporter_name" placeholder="성명을 입력하세요"
+                                    class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-red-500 focus:ring-red-500 text-sm" required>
+                            </div>
+                            <div class="flex-1">
+                                <label for="department_name" class="block text-sm font-medium text-gray-700 mb-1">소속 부서명</label>
+                                <input type="text" id="department_name" name="department_name" placeholder="부서명을 입력하세요"
+                                    class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-red-500 focus:ring-red-500 text-sm" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 필수 확인 사항: 영상 시청 완료 -->
+                    <div class="mb-6 p-4 bg-red-50 rounded-lg border border-red-300">
+                        <p class="font-bold text-lg text-red-800 mb-3">필수 확인 사항 <span class="text-red-500">*</span></p>
+                        <label class="inline-flex items-center text-gray-800 font-medium">
+                            <input type="checkbox" name="video_completion" id="video_completion_checkbox" value="시청_완료"
+                                class="w-5 h-5 text-red-600 border-gray-300 rounded focus:ring-red-500" required disabled>
+                            <span class="ml-2 text-base">위 4개의 교육 영상을 모두 시청했음을 확인합니다.</span>
+                        </label>
+                    </div>
+
+                    <!-- 퀴즈 항목 (Q1 ~ Q5) -->
+                    <div class="space-y-6">
+                        <!-- Q1: 화재 발견 시 최초 행동 -->
+                        <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+                            <p class="font-semibold text-gray-700 mb-2">Q1. 화재를 발견했을 때 가장 먼저 취해야 할 행동은?</p>
+                            <div class="space-y-2">
+                                <label class="quiz-option text-sm">
+                                    <input type="radio" name="quiz_q1" value="A.창문 열어 환기" class="w-4 h-4 text-red-600 focus:ring-red-500" onclick="checkAnswer(this)">
+                                    <span class="ml-2">A. 창문을 열어 연기를 배출하고 환기한다.</span>
+                                    <span class="feedback-icon text-lg hidden"></span>
+                                </label>
+                                <label class="quiz-option text-sm">
+                                    <input type="radio" name="quiz_q1" value="B.비상벨 및 신고" class="w-4 h-4 text-red-600 focus:ring-red-500" onclick="checkAnswer(this)" required>
+                                    <span class="ml-2">B. "불이야"라고 외치고 비상벨을 누른다.</span>
+                                    <span class="feedback-icon text-lg hidden"></span>
+                                </label>
+                                <label class="quiz-option text-sm">
+                                    <input type="radio" name="quiz_q1" value="C.엘리베이터 사용" class="w-4 h-4 text-red-600 focus:ring-red-500" onclick="checkAnswer(this)">
+                                    <span class="ml-2">C. 가장 가까운 엘리베이터를 타고 대피한다.</span>
+                                    <span class="feedback-icon text-lg hidden"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Q2: 대피 시 자세 -->
+                        <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+                            <p class="font-semibold text-gray-700 mb-2">Q2. 화재로 연기가 가득 찬 곳을 대피할 때 가장 올바른 자세는?</p>
+                            <div class="space-y-2">
+                                <label class="quiz-option text-sm">
+                                    <input type="radio" name="quiz_q2" value="A.똑바로 서서 이동" class="w-4 h-4 text-red-600 focus:ring-red-500" onclick="checkAnswer(this)">
+                                    <span class="ml-2">A. 똑바로 서서 빠른 걸음으로 이동한다.</span>
+                                    <span class="feedback-icon text-lg hidden"></span>
+                                </label>
+                                <label class="quiz-option text-sm">
+                                    <input type="radio" name="quiz_q2" value="B.낮은 자세 이동" class="w-4 h-4 text-red-600 focus:ring-red-500" onclick="checkAnswer(this)" required>
+                                    <span class="ml-2">B. 젖은 수건 등으로 입과 코를 막고, 낮은 자세로 이동한다.</span>
+                                    <span class="feedback-icon text-lg hidden"></span>
+                                </label>
+                                <label class="quiz-option text-sm">
+                                    <input type="radio" name="quiz_q2" value="C.눈 감고 이동" class="w-4 h-4 text-red-600 focus:ring-red-500" onclick="checkAnswer(this)">
+                                    <span class="ml-2">C. 눈을 감고 벽을 더듬으며 이동한다.</span>
+                                    <span class="feedback-icon text-lg hidden"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Q3: 소화기 사용법 (안전핀/손잡이) -->
+                        <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+                            <p class="font-semibold text-gray-700 mb-2">Q3. 소화기 사용 시 안전핀이 빠지지 않는 가장 흔한 이유와 올바른 조작법은?</p>
+                            <div class="space-y-2">
+                                <label class="quiz-option text-sm">
+                                    <input type="radio" name="quiz_q3" value="A.사용 전 흔들지 않아서" class="w-4 h-4 text-red-600 focus:ring-red-500" onclick="checkAnswer(this)">
+                                    <span class="ml-2">A. 소화기를 충분히 흔들지 않고 안전핀을 뽑으려 했기 때문이다.</span>
+                                    <span class="feedback-icon text-lg hidden"></span>
+                                </label>
+                                <label class="quiz-option text-sm">
+                                    <input type="radio" name="quiz_q3" value="B.레버를 놓은 채 뽑기" class="w-4 h-4 text-red-600 focus:ring-red-500" onclick="checkAnswer(this)" required>
+                                    <span class="ml-2">B. 안전핀을 뽑을 때 손잡이(레버)를 움켜쥐었기 때문이며, 손잡이를 놓은 상태에서 뽑아야 한다.</span>
+                                    <span class="feedback-icon text-lg hidden"></span>
+                                </label>
+                                <label class="quiz-option text-sm">
+                                    <input type="radio" name="quiz_q3" value="C.호스를 잡고 뽑기" class="w-4 h-4 text-red-600 focus:ring-red-500" onclick="checkAnswer(this)">
+                                    <span class="ml-2">C. 분사 호스를 잡고 뽑으면 더 쉽기 때문에 호스를 잡고 뽑는다.</span>
+                                    <span class="feedback-icon text-lg hidden"></span>
+                                </label>
+                                <label class="quiz-option text-sm">
+                                    <input type="radio" name="quiz_q3" value="D.아래쪽에서 뽑기" class="w-4 h-4 text-red-600 focus:ring-red-500" onclick="checkAnswer(this)">
+                                    <span class="ml-2">D. 소화기 노즐을 불에 조준한 상태에서 안전핀을 뽑아야 한다.</span>
+                                    <span class="feedback-icon text-lg hidden"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Q4: 대피 시 금지 사항 -->
+                        <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+                            <p class="font-semibold text-gray-700 mb-2">Q4. 화재 시 절대 금지해야 하는 행동은 무엇입습니까?</p>
+                            <div class="space-y-2">
+                                <label class="quiz-option text-sm">
+                                    <input type="radio" name="quiz_q4" value="A.소화기 사용" class="w-4 h-4 text-red-600 focus:ring-red-500" onclick="checkAnswer(this)">
+                                    <span class="ml-2">A. 초기 화재 시 소화기를 사용한다.</span>
+                                    <span class="feedback-icon text-lg hidden"></span>
+                                </label>
+                                <label class="quiz-option text-sm">
+                                    <input type="radio" name="quiz_q4" value="B.젖은 수건 사용" class="w-4 h-4 text-red-600 focus:ring-red-500" onclick="checkAnswer(this)">
+                                    <span class="ml-2">B. 젖은 수건으로 입과 코를 막는다.</span>
+                                    <span class="feedback-icon text-lg hidden"></span>
+                                </label>
+                                <label class="quiz-option text-sm">
+                                    <input type="radio" name="quiz_q4" value="C.엘리베이터 이용" class="w-4 h-4 text-red-600 focus:ring-red-500" onclick="checkAnswer(this)" required>
+                                    <span class="ml-2">C. 엘리베이터를 이용해 빠르게 탈출한다.</span>
+                                    <span class="feedback-icon text-lg hidden"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Q5: 비상계단 방화문 관련 -->
+                        <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
+                            <p class="font-semibold text-gray-700 mb-2">Q5. 비상계단의 방화문 관리에 대한 설명으로 올바른 것은?</p>
+                            <div class="space-y-2">
+                                <label class="quiz-option text-sm">
+                                    <input type="radio" name="quiz_q5" value="A.열어두어 환기" class="w-4 h-4 text-red-600 focus:ring-red-500" onclick="checkAnswer(this)">
+                                    <span class="ml-2">A. 평상시에는 열어두어 환기가 잘되도록 한다.</span>
+                                    <span class="feedback-icon text-lg hidden"></span>
+                                </label>
+                                <label class="quiz-option text-sm">
+                                    <input type="radio" name="quiz_q5" value="B.물건 적치" class="w-4 h-4 text-red-600 focus:ring-red-500" onclick="checkAnswer(this)">
+                                    <span class="ml-2">B. 잠시 물건을 적치해도 화재 시 자동으로 열린다.</span>
+                                    <span class="feedback-icon text-lg hidden"></span>
+                                </label>
+                                <label class="quiz-option text-sm">
+                                    <input type="radio" name="quiz_q5" value="C.항상 닫힘 유지" class="w-4 h-4 text-red-600 focus:ring-red-500" onclick="checkAnswer(this)" required>
+                                    <span class="ml-2">C. 화재 확산을 막기 위해 평상시 항상 닫힘 상태를 유지해야 한다.</span>
+                                    <span class="feedback-icon text-lg hidden"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 제출 버튼 및 응답 메시지 영역 -->
+                    <div class="text-center mt-8">
+                        <button type="submit" id="submit-button"
+                            class="inline-block px-8 py-4 bg-green-600 text-white font-bold text-lg rounded-lg hover:bg-green-700 transition duration-300 transform hover:scale-105 shadow-lg">
+                            교육 이행 결과 제출하기
+                        </button>
+                        <!-- 응답 메시지 표시 영역 (alert 대신 사용) -->
+                        <div id="response-message" class="mt-4 p-3 rounded-lg hidden font-medium"></div>
+                    </div>
+                </form>
+            </section>
+        </div>
+        <!-- 메인 콘텐츠 컨테이너 끝 -->
+
+        <!-- 푸터 -->
+        <footer class="text-center mt-10 p-4 text-gray-500 text-sm border-t border-gray-200">
+            <p>본 교육 자료는 소방 훈련 부재자 대상 안전 교육 이행 증빙을 위해 사용됩니다.</p>
+            <p class="mt-2 text-base font-bold text-blue-900 tracking-wider">
+                안전환경팀
+            </p>
+        </footer>
+    </div>
+
+    <!-- YouTube IFrame Player API 로드를 위한 스크립트 -->
+    <script>
+        // YouTube IFrame Player API 로드
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    </script>
+    
+    <!-- JavaScript for Form Submission Logic and Dynamic Quiz -->
+    <script>
+        // =========================================================================
+        // !!! 중요: Google Apps Script 웹 앱 URL을 배포 후 아래 변수에 설정해 주세요. !!!
+        // =========================================================================
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzeCGqEGAXvAIipqLBUNkeHNWFuZb32w5KO4lXylmaz0YELZNnZQTuYcRAo_6qKG4X1/exec'; // 여기에 실제 URL을 입력하세요!
+
+        // 퀴즈 정답 정의 (데이터의 일관성을 위해 한 곳에서 관리)
+        const QUIZ_ANSWERS = {
+            'quiz_q1': 'B.비상벨 및 신고',
+            'quiz_q2': 'B.낮은 자세 이동',
+            'quiz_q3': 'B.레버를 놓은 채 뽑기',
+            'quiz_q4': 'C.엘리베이터 이용',
+            'quiz_q5': 'C.항상 닫힘 유지'
+        };
+
+        const TOTAL_VIDEO_STEPS = 4;
+        let currentVideoStep = 0; // 0부터 시작
+        let currentPage = 1; // 1: 대응 절차, 2: 영상 시청, 3: 퀴즈 제출
+        
+        // =========================================================================
+        // YouTube API 관련 변수 및 로직
+        // =========================================================================
+        const videoIds = ['player-0', 'player-1', 'player-2', 'player-3'];
+        let players = []; // YouTube Player 객체를 저장할 배열
+        let isVideoCompleted = new Array(TOTAL_VIDEO_STEPS).fill(false); // 영상별 시청 완료 상태
+        
+        // API 로드 완료 시 YouTube에 의해 자동 호출되는 함수
+        function onYouTubeIframeAPIReady() {
+            // 모든 비디오 ID에 대해 플레이어 객체 생성
+            videoIds.forEach((id, index) => {
+                const iframe = document.getElementById(id);
+                if (iframe) {
+                    players[index] = new YT.Player(id, {
+                        events: {
+                            'onStateChange': onPlayerStateChange
+                        }
+                    });
+                }
+            });
+            
+            // 초기 UI 상태 업데이트
+            updateVideoStepUI();
+        }
+
+        // 플레이어 상태 변경 시 호출되는 함수
+        function onPlayerStateChange(event) {
+            // event.target.a.id는 'player-N' 형태의 ID입니다.
+            const playerId = event.target.a.id;
+            const videoIndex = parseInt(playerId.replace('player-', ''));
+            
+            // 상태가 '재생 종료(ENDED)' (코드: 0)일 때
+            if (event.data === YT.PlayerState.ENDED) {
+                if (!isVideoCompleted[videoIndex]) {
+                    isVideoCompleted[videoIndex] = true; // 시청 완료로 표시
+                    
+                    // 영상 시청 완료 후, 현재 보고 있는 페이지가 영상 페이지라면 UI 상태를 갱신합니다.
+                    if (currentPage === 2) {
+                        // 버튼 활성화 로직은 updateVideoStepUI에서 처리되지만, 
+                        // 마지막 영상 시청 완료 시 '모든 영상 시청 완료' 텍스트를 갱신하기 위해 호출
+                        updateVideoStepUI(); 
+                    }
+                }
+            }
+        }
+        
+        /**
+         * 다음 영상 버튼의 활성화 상태와 텍스트를 업데이트합니다.
+         * @param {boolean} enable - 활성화 여부
+         * @param {string} text - 버튼 텍스트
+         */
+        function updateNextButtonState(enable, text) {
+            const nextBtn = document.getElementById('next-video-btn');
+            nextBtn.textContent = text;
+            
+            if (enable) {
+                nextBtn.disabled = false;
+                nextBtn.classList.add('bg-red-600', 'hover:bg-red-700', 'hover:scale-105');
+                nextBtn.classList.remove('bg-gray-400', 'hover:bg-gray-400', 'cursor-not-allowed');
+            } else {
+                nextBtn.disabled = true;
+                nextBtn.classList.remove('bg-red-600', 'hover:bg-red-700', 'hover:scale-105');
+                nextBtn.classList.add('bg-gray-400', 'hover:bg-gray-400', 'cursor-not-allowed');
+            }
+        }
+
+        /**
+         * 메인 페이지 (섹션) 전환을 처리합니다.
+         * @param {number} pageId - 전환할 페이지 ID (1, 2, 3)
+         */
+        function switchPage(pageId) {
+            currentPage = pageId;
+            
+            // 1. 버튼 스타일 업데이트
+            document.querySelectorAll('[data-page-button]').forEach(button => {
+                const id = parseInt(button.getAttribute('data-page-button'));
+                if (id === currentPage) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+
+            // 2. 섹션 내용 가시성 업데이트
+            document.querySelectorAll('.page-content').forEach(content => {
+                const id = parseInt(content.getAttribute('data-page-id'));
+                if (id === currentPage) {
+                    content.classList.remove('hidden');
+                } else {
+                    content.classList.add('hidden');
+                }
+            });
+
+            // 페이지 전환 시 최상단으로 스크롤 이동
+            document.getElementById('app').scrollIntoView({ behavior: 'smooth' });
+
+            // 3. (페이지 2: 영상 시청)으로 돌아왔을 때, 영상 슬라이더 UI를 재설정하고 현재 영상을 정지/시작합니다.
+            if (currentPage === 2) {
+                // 이전에 정지되지 않은 플레이어가 있다면 모두 정지 (백그라운드 재생 방지)
+                players.forEach(player => {
+                    if (player && player.pauseVideo) {
+                        player.pauseVideo();
+                    }
+                });
+                
+                updateVideoStepUI();
+                
+                // 페이지 진입 시 현재 영상 자동 재생 시도 (브라우저 정책에 따라 차단될 수 있음)
+                if (players[currentVideoStep] && players[currentVideoStep].playVideo) {
+                     players[currentVideoStep].playVideo(); 
+                }
+            }
+            
+            // 4. (페이지 3: 퀴즈)로 이동할 때, 모든 영상 시청 완료 상태를 확인합니다.
+            if (currentPage === 3) {
+                const videoCompletionCheckbox = document.getElementById('video_completion_checkbox');
+                const allVideosWatched = isVideoCompleted.every(status => status === true);
+                
+                // 체크박스는 API 상태를 반영하며 수동 조작 불가 (disabled 상태)
+                if (allVideosWatched) {
+                    videoCompletionCheckbox.checked = true;
+                } else {
+                    // 미시청 영상이 있는 경우
+                    videoCompletionCheckbox.checked = false;
+                    // 사용자에게 시청을 유도하는 메시지 표시 (alert 대신 showMessage 사용)
+                    showMessage("⚠️ 퀴즈를 제출하려면 4개의 필수 교육 영상을 모두 시청해야 합니다. [2. 필수 영상 시청] 탭을 확인해 주세요.", 'error');
+                }
+            }
+        }
+
+        /**
+         * 비디오 단계 UI를 업데이트하고, 다음 버튼 활성화 상태를 제어합니다.
+         */
+        function updateVideoStepUI() {
+            const steps = document.querySelectorAll('.video-step');
+            const prevBtn = document.getElementById('prev-video-btn');
+            const statusSpan = document.getElementById('video-step-status');
+
+            // 1. 모든 단계를 숨기고 현재 단계만 표시
+            steps.forEach((step, index) => {
+                if (index === currentVideoStep) {
+                    step.classList.remove('hidden');
+                } else {
+                    step.classList.add('hidden');
+                }
+            });
+
+            // 2. 버튼 상태 업데이트
+            prevBtn.disabled = (currentVideoStep === 0);
+            
+            // **핵심: 다음 버튼 상태 업데이트 로직 (상시 활성화)
+            if (currentVideoStep === TOTAL_VIDEO_STEPS - 1) {
+                // 마지막 영상: 비활성화 (더 이상 다음 영상이 없으므로)
+                const allWatched = isVideoCompleted.every(status => status === true);
+                if (allWatched) {
+                    updateNextButtonState(false, '모든 영상 시청 완료');
+                } else {
+                    updateNextButtonState(false, '마지막 영상 (미시청 있음)');
+                }
+            } else {
+                // 마지막 영상이 아닐 경우, 시청 여부와 관계없이 항상 활성화
+                updateNextButtonState(true, '다음 영상 ➡️');
+            }
+
+            // 3. 현재 상태 표시 업데이트
+            statusSpan.textContent = `${currentVideoStep + 1}/${TOTAL_VIDEO_STEPS}`;
+            
+            // 스크롤을 영상 섹션 상단으로 이동
+            const videoSection = document.querySelector('[data-page-id="2"]');
+            if(videoSection && currentPage === 2) {
+                 videoSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        /**
+         * 비디오 단계를 변경합니다.
+         * @param {number} direction - -1 (이전) 또는 1 (다음)
+         */
+        function changeVideoStep(direction) {
+            
+            const nextBtn = document.getElementById('next-video-btn');
+            const prevBtn = document.getElementById('prev-video-btn');
+
+            // 다음 버튼이 비활성화된 상태에서 다음으로 넘기려고 시도할 경우 중단 (마지막 영상일 경우만 해당)
+            if (direction === 1 && nextBtn.disabled) {
+                return;
+            }
+            // 이전 버튼이 비활성화된 상태에서 이전으로 넘기려고 시도할 경우 중단 (첫 영상일 경우만 해당)
+            if (direction === -1 && prevBtn.disabled) {
+                 return;
+            }
+
+            const newStep = currentVideoStep + direction;
+
+            if (newStep >= 0 && newStep < TOTAL_VIDEO_STEPS) {
+                // 기존 영상 정지
+                if (players[currentVideoStep] && players[currentVideoStep].pauseVideo) {
+                    players[currentVideoStep].pauseVideo();
+                }
+                
+                currentVideoStep = newStep;
+                updateVideoStepUI();
+                
+                // 새 영상으로 이동 시, 해당 영상을 재생합니다.
+                if (players[currentVideoStep] && players[currentVideoStep].playVideo) {
+                     players[currentVideoStep].playVideo(); 
+                }
+            }
+        }
+
+        /**
+         * 퀴즈 옵션 선택 시 즉각적인 피드백을 제공합니다.
+         * (기존 로직 유지)
+         * @param {HTMLInputElement} selectedRadio - 선택된 라디오 버튼 요소
+         */
+        function checkAnswer(selectedRadio) {
+            const questionName = selectedRadio.name;
+            const selectedValue = selectedRadio.value;
+            const correctAnswer = QUIZ_ANSWERS[questionName];
+
+            const questionDiv = selectedRadio.closest('.p-4');
+            const allOptions = questionDiv.querySelectorAll('.quiz-option');
+
+            allOptions.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+                const icon = option.querySelector('.feedback-icon');
+                if (icon) {
+                    icon.classList.add('hidden');
+                    icon.textContent = '';
+                }
+            });
+
+            const selectedLabel = selectedRadio.closest('.quiz-option');
+            const feedbackIcon = selectedLabel.querySelector('.feedback-icon');
+
+            if (selectedValue === correctAnswer) {
+                selectedLabel.classList.add('correct');
+                if (feedbackIcon) {
+                    feedbackIcon.classList.remove('hidden');
+                    feedbackIcon.textContent = '정답'; 
+                    feedbackIcon.classList.add('font-bold', 'text-green-600');
+                }
+            } else {
+                selectedLabel.classList.add('incorrect');
+                if (feedbackIcon) {
+                    feedbackIcon.classList.remove('hidden');
+                    feedbackIcon.textContent = '오답'; 
+                    feedbackIcon.classList.add('font-bold', 'text-red-600');
+                }
+            }
+        }
+
+
+        /**
+         * 응답 메시지 박스를 업데이트하고 표시합니다. (alert 대신 사용)
+         * (기존 로직 유지)
+         * @param {string} message - 표시할 메시지
+         * @param {string} type - 'success', 'error', or 'pending'
+         */
+        function showMessage(message, type) {
+            const messageBox = document.getElementById('response-message');
+            messageBox.textContent = message;
+            messageBox.classList.remove('hidden', 'bg-green-100', 'bg-red-100', 'text-green-800', 'text-red-800', 'bg-gray-100', 'text-gray-800');
+
+            if (type === 'success') {
+                messageBox.classList.add('bg-green-100', 'text-green-800');
+            } else if (type === 'error') {
+                messageBox.classList.add('bg-red-100', 'text-red-800');
+            } else { // pending
+                messageBox.classList.add('bg-gray-100', 'text-gray-800');
+            }
+            // 스크롤을 메시지 박스 위치로 이동
+            messageBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        /**
+         * 폼 제출을 가로채 Apps Script로 데이터를 비동기 전송합니다.
+         * @param {Event} event - 제출 이벤트
+         */
+        async function handleFormSubmit(event) {
+            event.preventDefault(); // 기본 폼 제출 동작 방지
+
+            const form = document.getElementById('training-quiz-form');
+            const submitButton = document.getElementById('submit-button');
+            const formData = new FormData(form);
+            const data = {};
+
+            // 1. 퀴즈 및 필수 입력 필드 확인
+            const quizQuestions = ['quiz_q1', 'quiz_q2', 'quiz_q3', 'quiz_q4', 'quiz_q5'];
+            let isQuizComplete = true;
+            for (const q of quizQuestions) {
+                if (!formData.has(q)) {
+                    isQuizComplete = false;
+                    break;
+                }
+            }
+            
+            const allVideosWatched = isVideoCompleted.every(status => status === true);
+
+            if (!isQuizComplete || !formData.get('reporter_name') || !formData.get('department_name') || !allVideosWatched) {
+                let msg = '⚠️ 모든 항목을 완료해야 제출할 수 있습니다.';
+                if (!isQuizComplete) msg += ' 퀴즈를 모두 응답해 주세요.';
+                if (!allVideosWatched) msg += ' **4개의 필수 영상을 모두 시청**해야 합니다.';
+                if (!formData.get('reporter_name') || !formData.get('department_name')) msg += ' 성명 및 부서명을 입력해 주세요.';
+
+                showMessage(msg, 'error');
+                document.getElementById('video_completion_checkbox').checked = allVideosWatched; 
+                return;
+            }
+
+            // 2. 퀴즈 점수 계산 및 데이터 준비
+            let correctAnswers = 0;
+            formData.forEach((value, key) => {
+                data[key] = value;
+                if (key.startsWith('quiz_q') && value === QUIZ_ANSWERS[key]) {
+                    correctAnswers++;
+                }
+            });
+
+            const totalQuestions = Object.keys(QUIZ_ANSWERS).length;
+            data['total_score'] = `${correctAnswers} / ${totalQuestions}`;
+            data['submission_time'] = new Date().toLocaleString('ko-KR', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+
+            // 3. 로딩 상태 표시
+            submitButton.disabled = true;
+            submitButton.textContent = '데이터를 서버로 전송 중입니다...';
+            submitButton.classList.add('bg-gray-400', 'hover:bg-gray-400', 'cursor-not-allowed');
+            submitButton.classList.remove('bg-green-600', 'hover:bg-green-700', 'hover:scale-105');
+            showMessage('데이터를 서버로 전송 중입니다...', 'pending');
+
+            // 4. 데이터 전송
+            try {
+                const response = await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    body: new URLSearchParams(data),
+                });
+
+                const resultText = await response.text();
+                let result = {};
+                
+                try {
+                    result = JSON.parse(resultText); 
+                } catch(e) {
+                    result = { result: response.ok ? 'success' : 'error', message: `Server returned non-JSON response: ${resultText.substring(0, 100)}...` };
+                    if (response.ok) {
+                        result.message = "성공적으로 제출되었으나, 서버 응답 형식이 예상과 다릅니다. 관리자에게 문의하세요.";
+                    }
+                }
+                
+                if (response.ok && result.result === 'success') {
+                    // 성공 메시지 표시 및 폼 초기화
+                    showMessage(`✅ 교육 이행 결과가 성공적으로 제출되었습니다. (점수: ${data.total_score}) 안전에 유의해 주십시오.`, 'success');
+                    form.reset();
+                    // 퀴즈 피드백 초기화
+                    document.querySelectorAll('.quiz-option').forEach(option => {
+                        option.classList.remove('correct', 'incorrect');
+                        const icon = option.querySelector('.feedback-icon');
+                        if (icon) {
+                            icon.classList.add('hidden');
+                            icon.textContent = '';
+                        }
+                    });
+                } else {
+                    const errorMessage = result.message || `HTTP 오류 코드: ${response.status}. 서버 응답: ${resultText.substring(0, 100)}...`;
+                    console.error('Apps Script Error:', errorMessage);
+                    showMessage(`🚨 제출 실패: 서버 연결 및 응답에 문제가 발생했습니다. 관리자에게 문의하십시오. (${errorMessage})`, 'error');
+                }
+            } catch (error) {
+                console.error('Fetch Error:', error);
+                showMessage('🚨 네트워크 연결 오류가 발생했습니다. Apps Script URL 및 배포 설정을 확인해 주십시오.', 'error');
+            } finally {
+                // 버튼 상태 복구
+                submitButton.disabled = false;
+                submitButton.classList.add('bg-green-600', 'hover:bg-green-700', 'hover:scale-105');
+                submitButton.textContent = '교육 이행 결과 제출하기';
+                submitButton.classList.remove('bg-gray-400', 'hover:bg-gray-400', 'cursor-not-allowed');
+            }
+        }
+
+        // 페이지 로드 시 초기 UI 설정
+        document.addEventListener('DOMContentLoaded', () => {
+            switchPage(1); // 1페이지로 시작
+            // onYouTubeIframeAPIReady는 API 로드 후 자동으로 호출됩니다.
+        });
+    </script>
+</body>
+</html>
