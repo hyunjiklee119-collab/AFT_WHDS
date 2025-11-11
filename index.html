@@ -410,7 +410,7 @@
 
                         <!-- Q4: 대피 시 금지 사항 -->
                         <div class="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
-                            <p class="font-semibold text-gray-700 mb-2">Q4. 화재 시 절대 금지해야 하는 행동은 무엇입습니까?</p>
+                            <p class="font-semibold text-gray-700 mb-2">Q4. 화재 시 절대 금지해야 하는 행동은 무엇입니까?</p>
                             <div class="space-y-2">
                                 <label class="quiz-option text-sm">
                                     <input type="radio" name="quiz_q4" value="A.소화기 사용" class="w-4 h-4 text-red-600 focus:ring-red-500" onclick="checkAnswer(this)">
@@ -543,8 +543,7 @@
                     
                     // 영상 시청 완료 후, 현재 보고 있는 페이지가 영상 페이지라면 UI 상태를 갱신합니다.
                     if (currentPage === 2) {
-                        // 버튼 활성화 로직은 updateVideoStepUI에서 처리되지만, 
-                        // 마지막 영상 시청 완료 시 '모든 영상 시청 완료' 텍스트를 갱신하기 위해 호출
+                        // 마지막 영상의 버튼 텍스트를 갱신하기 위해 호출
                         updateVideoStepUI(); 
                     }
                 }
@@ -655,14 +654,18 @@
             // 2. 버튼 상태 업데이트
             prevBtn.disabled = (currentVideoStep === 0);
             
-            // **핵심: 다음 버튼 상태 업데이트 로직 (상시 활성화)
+            // **핵심: 다음 버튼 상태 업데이트 로직 (상시 활성화)**
             if (currentVideoStep === TOTAL_VIDEO_STEPS - 1) {
                 // 마지막 영상: 비활성화 (더 이상 다음 영상이 없으므로)
                 const allWatched = isVideoCompleted.every(status => status === true);
+                
+                // 마지막 영상의 시청 여부에 따라 텍스트를 변경하여 시청을 유도
                 if (allWatched) {
                     updateNextButtonState(false, '모든 영상 시청 완료');
+                } else if (isVideoCompleted[currentVideoStep]) {
+                    updateNextButtonState(false, '마지막 영상 시청 완료'); // 마지막 영상만 완료된 경우
                 } else {
-                    updateNextButtonState(false, '마지막 영상 (미시청 있음)');
+                    updateNextButtonState(false, '마지막 영상 (시청 필요)'); // 마지막 영상 미시청 상태
                 }
             } else {
                 // 마지막 영상이 아닐 경우, 시청 여부와 관계없이 항상 활성화
